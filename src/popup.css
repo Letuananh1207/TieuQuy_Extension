@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.animate-fadeFloat {
+  animation: fadeFloat 1s ease-in-out forwards;
+}
+
+.mailContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mailContent br {
+  display: none;
+}
