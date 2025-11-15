@@ -1,6 +1,7 @@
 // ==========================
 // 🧠 Background Service Worker
 // ==========================
+// const API_BASE_URL = "http://localhost:3000";
 const API_BASE_URL = "https://tieuquyhantuluc.onrender.com";
 
 const isMessageRead = async (id) => {
@@ -23,13 +24,12 @@ const CACHE_DURATION = 24 * 60 * 1000; // 1 ngày
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "GET_USER_STATUS") {
+    console.log("🔍 [GET_USER_STATUS] Bắt đầu kiểm tra...");
+
     chrome.storage.local.get(
       ["token", "user", "lastChecked"],
-      function (result) {
-        var token = result.token;
-        var user = result.user;
-        var lastChecked = result.lastChecked;
-        var now = Date.now();
+      async ({ token, user, lastChecked }) => {
+        const now = Date.now();
 
         const isMessageRead = async (id) => {
           if (!id) return false;
@@ -94,8 +94,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
               return;
             }
 
+            console.log("✅ Nhận user hợp lệ:", newUser.email);
+
+            // Tính ngày premium còn lại
             if (newUser.premium && newUser.premium.expiresAt) {
-              var remaining =
+              const remaining =
                 Math.ceil(
                   (new Date(newUser.premium.expiresAt) - new Date()) /
                     (1000 * 60 * 60 * 24)
@@ -115,7 +118,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       }
     );
 
-    return true;
+    return true; // Giữ sendResponse async
   }
 
   if (msg.type === "CLEAR_USER_CACHE") {
@@ -140,4 +143,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     });
     return true;
   }
+
+  // ===============================
+  // 🚫 Nếu không khớp message nào
+  // ===============================
+  console.warn("⚠️ Không có listener cho message:", msg.type);
+  sendResponse(null);
+  return true;
 });

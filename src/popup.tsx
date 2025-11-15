@@ -122,20 +122,29 @@ export default function Popup() {
   }, []);
 
   // ===============================
-  // 🔑 Đăng nhập / đăng xuất
+  // 🔑 Đăng nhập / đăng xuất với dynamic extensionId
   // ===============================
   const handleLogin = () => {
     setLoading(true);
+    console.log("=== 🔑 [LOGIN FLOW BẮT ĐẦU] ===");
 
     const extensionId = chrome.runtime.id;
     const authUrl = `${API_URL}/api/auth/google?extensionId=${extensionId}`;
 
+    // 2️⃣ Tạo URL đăng nhập
+    const authUrl = `${API_URL}/api/auth/google?prompt=select_account&extensionId=${extensionId}`;
+    console.log("👉 Gọi URL đăng nhập:", authUrl);
+
+    // 3️⃣ Thực hiện đăng nhập qua Google
     chrome.identity.launchWebAuthFlow(
       {
         url: authUrl,
         interactive: true,
       },
       (redirectUrl) => {
+        console.log("=== 🌀 [KẾT QUẢ login callback] ===");
+
+        // 4️⃣ Kiểm tra lỗi Chrome runtime
         if (chrome.runtime.lastError) {
           // console.error("Lỗi khi đăng nhập:", chrome.runtime.lastError); // OK, nhẹ
           setLoading(false);
