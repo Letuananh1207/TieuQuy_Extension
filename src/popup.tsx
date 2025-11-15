@@ -48,6 +48,13 @@ export default function Popup() {
   // 🚀 Khi popup mở
   // ===============================
   useEffect(() => {
+    // Wake up server để tránh delay khi login
+    const awakeServer = async () => {
+      await fetch(`${API_URL}/api/ping`)
+        .then(() => console.log("✅ Server sẵn sàng"))
+        .catch(() => console.warn("⚠️ Server đang khởi động..."));
+    };
+
     const checkAndCancelPremium = async (user: UserType) => {
       if (!user?.premium) return;
 
@@ -77,6 +84,8 @@ export default function Popup() {
       }
     };
 
+    // Đánh thức server
+    awakeServer();
     // --- tải user ---
     loadUser();
 
@@ -116,42 +125,78 @@ export default function Popup() {
   }, []);
 
   // ===============================
-  // 🔑 Đăng nhập / đăng xuất
+  // 🔑 Đăng nhập / đăng xuất với dynamic extensionId
   // ===============================
   const handleLogin = () => {
     setLoading(true);
+    console.log("=== 🔑 [LOGIN FLOW BẮT ĐẦU] ===");
 
-    const authUrl = `${API_URL}/api/auth/google?prompt=select_account`;
+    // 1️⃣ Lấy extension ID động
+    const extensionId = chrome.runtime.id;
+    console.log("👉 Extension ID hiện tại:", extensionId);
 
+    // 2️⃣ Tạo URL đăng nhập
+    const authUrl = `${API_URL}/api/auth/google?prompt=select_account&extensionId=${extensionId}`;
+    console.log("👉 Gọi URL đăng nhập:", authUrl);
+
+    // 3️⃣ Thực hiện đăng nhập qua Google
     chrome.identity.launchWebAuthFlow(
       {
         url: authUrl,
         interactive: true,
       },
       (redirectUrl) => {
+        console.log("=== 🌀 [KẾT QUẢ login callback] ===");
+
+        // 4️⃣ Kiểm tra lỗi Chrome runtime
         if (chrome.runtime.lastError) {
-          console.error("Lỗi khi đăng nhập:", chrome.runtime.lastError);
+          console.error(
+            "❌ Lỗi khi đăng nhập:",
+            chrome.runtime.lastError.message || chrome.runtime.lastError
+          );
+          console.debug(
+            "📋 Chi tiết lỗi:",
+            JSON.stringify(chrome.runtime.lastError, null, 2)
+          );
           setLoading(false);
           return;
         }
 
+        // 5️⃣ Kiểm tra redirect URL trả về
+        console.log("🔁 Redirect URL nhận được:", redirectUrl);
+
         if (redirectUrl) {
-          const token = new URL(redirectUrl).searchParams.get("token");
-          if (token) {
-            chrome.storage.local.set({ token }, () => {
-              loadUser();
-              // ✅ Hiển thị thông báo nhỏ
-              setShowSuccess(true);
-              setTimeout(() => setShowSuccess(false), 100);
-            });
-          } else {
-            console.warn("⚠️ Không lấy được token từ redirectUrl");
+          try {
+            const parsedUrl = new URL(redirectUrl);
+            console.log("✅ Phân tích redirect URL:", parsedUrl);
+
+            const token = parsedUrl.searchParams.get("token");
+            console.log("🔐 Token lấy được từ redirect:", token);
+
+            if (token) {
+              chrome.storage.local.set({ token }, () => {
+                console.log("💾 Token đã được lưu vào storage");
+                loadUser();
+                setShowSuccess(true);
+                setTimeout(() => setShowSuccess(false), 100);
+              });
+            } else {
+              console.warn(
+                "⚠️ Không lấy được token từ redirectUrl:",
+                redirectUrl
+              );
+              setLoading(false);
+            }
+          } catch (err) {
+            console.error("💥 Lỗi khi parse redirectUrl:", err);
             setLoading(false);
           }
         } else {
           console.warn("⚠️ Không có redirectUrl sau khi login");
           setLoading(false);
         }
+
+        console.log("=== 🔚 [LOGIN FLOW KẾT THÚC] ===");
       }
     );
   };

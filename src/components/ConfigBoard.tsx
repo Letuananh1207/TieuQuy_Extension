@@ -173,8 +173,7 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
                   <Power
                     size={46}
                     color="gray"
-                    onClick={handleActive}
-                    className="rounded-full p-2 cursor-pointer bg-white shadow-sm border hover:bg-gray-50"
+                    className="rounded-full p-2 bg-white shadow-sm border"
                   />
                   <div className="text-xs">Gia hạn để tiếp tục sử dụng</div>
                 </div>

@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "CN Tiểu Quỷ Hán tự Lục",
-  "version": "1.0.0",
+  "name": "Tiểu Quỷ Hán tự Lục",
+  "version": "1.0.2",
   "description": "Trợ lý học Hán tự thông minh giúp bạn ghi nhớ chữ nhanh hơn ngay trên mọi trang web.",
-  "permissions": ["activeTab", "storage", "identity", "scripting"],
+  "permissions": ["activeTab", "storage", "identity"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "CN Tiểu Quỷ Hán tự Lục",
+    "default_title": "Tiểu Quỷ Hán tự Lục",
     "default_popup": "dist/popup.html",
     "default_icon": {
       "16": "dist/icon16.png",
