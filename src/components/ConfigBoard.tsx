@@ -1,19 +1,24 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import type { UserType } from "../types/userType";
+import { useState, useContext } from "react";
 import {
-  Inbox,
-  Power,
-  Crown,
+  Search,
+  Gem,
   LogOut,
-  PowerOff,
   UserRoundCheck,
   Undo2,
+  Star,
+  SquareCheck,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { UserType } from "../types/userType";
+import { AppContext } from "../contexts/AppContext";
 import Premium from "./Premium";
-import MailBox from "./MailBox";
 import UserCheck from "./UserCheck";
 import Tutorial from "./Tutorial";
+import Home from "./Home";
+import Content from "./Content";
+import Library from "./Library";
+import CheckTab from "./CheckTab";
+import MailBox from "./MailBox";
 
 interface ConfigBoardProps {
   user: UserType;
@@ -34,17 +39,35 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
   showTutorial,
   setShowTutorial,
 }) => {
-  const [mode, setMode] = useState<"home" | "premium" | "userCheck" | "mail">(
-    "home"
-  );
-  const [showAlert, setShowAlert] = useState(false);
-
-  const tagName = {
-    home: "Trang chủ",
-    premium: "Nâng cấp",
-    userCheck: "Yêu cầu nâng cấp",
-    mail: "Hộp thư",
+  const context = useContext(AppContext);
+  if (!context) throw new Error("AppContext chưa được cung cấp");
+  const { activeTab, setActiveTab } = context;
+  // Map tab
+  const tabMap = {
+    home: {
+      name: "Home",
+      component: (
+        <Home
+          user={user}
+          showTutorial={showTutorial}
+          handleActive={handleActive}
+          handleDeActive={handleDeActive}
+          isActive={isActive}
+        />
+      ),
+    },
+    search: { name: "Tra cứu", component: <Content /> },
+    library: { name: "Sổ Tay", component: <Library /> },
+    check: { name: "Nhiệm vụ hàng ngày", component: <CheckTab /> },
+    premium: { name: "Premium", component: <Premium /> },
+    userCheck: {
+      name: "Yêu cầu nâng cấp",
+      component: <UserCheck user={user} />,
+    },
+    mail: { name: "Hộp thư", component: <MailBox user={user} /> },
   };
+
+  const [showAlert, setShowAlert] = useState(false);
 
   const confirmLogout = () => {
     setShowAlert(false);
@@ -52,10 +75,16 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
   };
 
   // ✨ Animation variants (paper-turn effect)
-  const variants = {
-    initial: { opacity: 0, scale: 0.95, rotateY: -10 },
-    animate: { opacity: 1, scale: 1, rotateY: 0 },
-    exit: { opacity: 0, scale: 0.95, rotateY: 10 },
+  // const variants = {
+  //   initial: { opacity: 0, rotate: -2, scale: 0.98 },
+  //   animate: { opacity: 1, rotate: 0, scale: 1 },
+  //   exit: { opacity: 0, rotate: 2, scale: 0.98 },
+  // };
+
+  const variantsOff = {
+    initial: { opacity: 1, x: 0, scale: 1, rotate: 0 },
+    animate: { opacity: 1, x: 0, scale: 1, rotate: 0 },
+    exit: { opacity: 1, x: 0, scale: 1, rotate: 0 },
   };
 
   return (
@@ -69,7 +98,7 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
             className="rounded-full w-8 border"
           />
           {user.premium?.active && (
-            <Crown
+            <Gem
               size={12}
               className="absolute -top-1 -left-1 -rotate-40"
               strokeWidth={1}
@@ -79,38 +108,36 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
         </div>
 
         {/* Sidebar buttons */}
-        {mode === "home" ? (
+        {activeTab === "home" ? (
           <>
-            <Power
+            <Search
               size={30}
-              className="border bg-gray-500 stroke-white rounded-full p-1 cursor-pointer hover:bg-gray-600"
-              onClick={() => setMode("home")}
+              color="white"
+              className="border rounded-full p-1 bg-gray-600 "
+              onClick={() => setActiveTab("home")}
+            />
+            <Star
+              size={30}
+              className="border rounded-full p-1 bg-white hover:stroke-gray-600 hover:bg-gray-600 hover:fill-white cursor-pointer "
+              color="purple"
+              fill="yellow"
+              onClick={() => setActiveTab("library")}
+            />
+            <SquareCheck
+              size={30}
+              className="cursor-pointer border rounded-full p-1 bg-white  hover:stroke-gray-600 hover:bg-gray-600 hover:fill-white "
+              color="white"
+              fill="green"
+              onClick={() => setActiveTab("check")}
             />
             {user.role === "admin" && (
               <UserRoundCheck
                 size={30}
                 className="border bg-white stroke-gray-600 rounded-full p-1 cursor-pointer hover:bg-gray-500 hover:stroke-white"
-                onClick={() => setMode("userCheck")}
+                onClick={() => setActiveTab("userCheck")}
               />
             )}
-            <div className="relative">
-              <Inbox
-                size={30}
-                className="border bg-white stroke-gray-600 rounded-full p-1 cursor-pointer hover:bg-gray-500 hover:stroke-white"
-                onClick={() => setMode("mail")}
-              />
-              {(user.needUpdate || showTutorial) && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 flex items-center justify-center rounded-full bg-gray-400 text-[9px] font-semibold"></div>
-              )}
-            </div>
-            {!user.premium?.active && (
-              <Crown
-                color="purple"
-                size={30}
-                className="border bg-white rounded-full p-1 cursor-pointer hover:bg-gray-500 hover:fill-white hover:stroke-gray-500"
-                onClick={() => setMode("premium")}
-              />
-            )}
+
             <div className="flex-1" />
             <LogOut
               size={30}
@@ -122,15 +149,15 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
         ) : (
           <>
             <div className="text-center text-sm bg-white/50 rounded-md px-1 py-2">
-              {tagName[mode]}
+              {tabMap[activeTab].name}
             </div>
             <div className="flex-1" />
             <Undo2
               size={28}
-              onClick={() => setMode("home")}
+              onClick={() => setActiveTab("home")}
               className="border bg-white rounded-full p-1 cursor-pointer hover:bg-gray-500 hover:stroke-white"
             />
-            <div className="flex-1" />
+            {/* <div className="flex-1" /> */}
           </>
         )}
       </div>
@@ -138,95 +165,27 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
       {/* Content */}
       <div className="flex-1 bg-[url(/manga_paper_center.png)] bg-center bg-cover relative perspective-1000">
         <AnimatePresence mode="wait">
-          {mode === "home" && (
+          {tabMap[activeTab] && (
             <motion.div
-              key="home"
-              variants={variants}
+              key={activeTab}
+              variants={variantsOff}
               initial="initial"
               animate="animate"
+              exit="exit"
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute inset-0 flex flex-col items-center justify-center"
+              className="absolute inset-0  bg-white"
             >
-              {user.premium?.active ? (
-                <div className="flex flex-col items-center gap-2">
-                  {isActive ? (
-                    <PowerOff
-                      size={46}
-                      color="gray"
-                      onClick={handleDeActive}
-                      className="rounded-full p-2 cursor-pointer bg-white shadow-sm border hover:bg-gray-50"
-                    />
-                  ) : (
-                    <Power
-                      size={46}
-                      color="gray"
-                      onClick={handleActive}
-                      className="rounded-full p-2 cursor-pointer bg-white shadow-sm border hover:bg-gray-50"
-                    />
-                  )}
-                  <div className="font-semibold text-sm">
-                    {isActive ? "Tắt" : "Bật"}
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-2">
-                  <Power
-                    size={46}
-                    color="gray"
-                    onClick={handleActive}
-                    className="rounded-full p-2 cursor-pointer bg-white shadow-sm border hover:bg-gray-50"
-                  />
-                  <div className="text-xs">Gia hạn để tiếp tục sử dụng</div>
-                </div>
-              )}
-            </motion.div>
-          )}
-
-          {mode === "premium" && (
-            <motion.div
-              key="premium"
-              variants={variants}
-              initial="initial"
-              animate="animate"
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute inset-0 overflow-y-scroll hide-scrollbar py-4"
-            >
-              <Premium />
-            </motion.div>
-          )}
-
-          {mode === "userCheck" && (
-            <motion.div
-              key="userCheck"
-              variants={variants}
-              initial="initial"
-              animate="animate"
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute inset-0"
-            >
-              <UserCheck user={user} />
-            </motion.div>
-          )}
-
-          {mode === "mail" && (
-            <motion.div
-              key="mail"
-              variants={variants}
-              initial="initial"
-              animate="animate"
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute inset-0"
-            >
-              <MailBox user={user} />
+              {tabMap[activeTab].component}
             </motion.div>
           )}
         </AnimatePresence>
+
         {showTutorial && <Tutorial setShowTutorial={setShowTutorial} />}
       </div>
 
       {/* Alert */}
       {showAlert && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-100">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}

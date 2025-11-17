@@ -52,9 +52,9 @@ const CheckTab: React.FC = () => {
         <Flame size={16} fill="orange" />
         <span>{streak}</span>
       </div>
-      <div className="w-14 absolute -left-15 bottom-4 -translate-y-1/2 flex justify-center cursor-pointer ">
+      <div className="w-14 absolute -left-13 bottom-11 -translate-y-1/2 flex justify-center cursor-pointer ">
         <span title="Hoàn thành ít nhất 3/4 nhiệm vụ hàng ngày để nhận 1 điểm nhiệt huyết.">
-          <Info size={10} />
+          <Info size={10} className="fill-gray-400" />
         </span>
       </div>
       {/* <div className="absolute text-[10px] top-1 right-0 flex items-center gap-1">

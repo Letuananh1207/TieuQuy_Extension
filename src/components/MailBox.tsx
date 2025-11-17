@@ -71,13 +71,13 @@ const MailBox: React.FC<{ user: UserType }> = ({ user }) => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-full text-sm text-gray-500">
+      <div className="flex justify-center items-center h-full text-sm text-gray-500 bg-[url(/manga_paper_center.png)] bg-center bg-cover">
         Đang tải tin nhắn...
       </div>
     );
 
   return (
-    <div className="h-full py-2 px-1 flex relative">
+    <div className="h-full py-2 px-1 flex relative bg-[url(/manga_paper_center.png)] bg-center bg-cover">
       {mode === "default" && (
         <>
           <MailList

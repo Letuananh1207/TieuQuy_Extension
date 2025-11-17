@@ -18,7 +18,7 @@ import {
 
 import { countNguonGoc } from "../ultities/mission";
 
-const Content: React.FC = () => {
+const ContentFlash: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState({
     cachNho: false,
     nguonGoc: false,
@@ -407,7 +407,7 @@ const Content: React.FC = () => {
       </div>
 
       {/* Thanh mục lục bên trái */}
-      <div className="absolute -left-12 top-3/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-[46px]">
+      <div className="absolute -left-14 top-3/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-13">
         <a
           href="#tuGhep"
           className="bg-white w-full text-center py-1 hover:bg-gray-400"
@@ -427,8 +427,12 @@ const Content: React.FC = () => {
           Nguồn gốc
         </a>
       </div>
+      <div className="absolute -left-14 top-4 w-13 flex flex-col items-center bg-white/60">
+        <span>{character}</span>
+        <span className="text-xs">là gì?</span>
+      </div>
     </div>
   );
 };
 
-export default Content;
+export default ContentFlash;

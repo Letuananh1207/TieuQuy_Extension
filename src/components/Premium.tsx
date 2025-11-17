@@ -175,7 +175,7 @@ const Premium: React.FC = () => {
         </div>
 
         {/* Mục lục */}
-        <div className="absolute left-[-3.75rem] top-3/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-14">
+        {/* <div className="absolute left-[-3.75rem] top-3/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-14">
           <a
             href="#"
             onClick={(e) => {
@@ -199,7 +199,7 @@ const Premium: React.FC = () => {
           >
             Fanpage
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

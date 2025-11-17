@@ -95,7 +95,7 @@ const Library: React.FC = () => {
               </div>
             ))}
           </div>
-          <div className="absolute -left-15 top-3/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-14">
+          <div className="absolute -left-12 top-4/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-[46px]">
             <a
               className="bg-white w-full text-center py-1 hover:bg-gray-400 cursor-pointer"
               onClick={() => setLibraryMode("flashcard")}
@@ -106,7 +106,7 @@ const Library: React.FC = () => {
               className="bg-white w-full text-center py-1 hover:bg-gray-400 cursor-pointer"
               onClick={exportExcel}
             >
-              Xuất excel
+              Tạo Excel
             </a>
           </div>
           {showAlert && (

@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
-import { SquareCheck, CornerUpLeft, Search, Star } from "lucide-react";
+import { SquareCheck, Search, Star } from "lucide-react";
 import { AppContext } from "../contexts/AppContext";
 import Premium from "./Premium";
-import Content from "./Content";
+import ContentFlash from "./ContentFlash";
 import CheckTab from "./CheckTab";
 import Library from "./Library";
 import Home from "./Home";
@@ -22,9 +22,14 @@ const ChatBot: React.FC = () => {
       name: "Home",
       component: <Home />,
     },
-    search: { name: "Tra cứu", component: <Content /> },
+    search: { name: "", component: <ContentFlash /> },
     library: { name: "Sổ Tay", component: <Library /> },
     check: { name: "Nhiệm vụ hàng ngày", component: <CheckTab /> },
+    userCheck: {
+      name: "Yêu cầu nâng cấp",
+      component: <></>,
+    },
+    mail: { name: "Hộp thư", component: <></> },
     premium: { name: "Premium", component: <Premium /> },
   };
 
@@ -113,11 +118,11 @@ const ChatBot: React.FC = () => {
           </>
         ) : (
           <>
-            <CornerUpLeft
+            {/* <CornerUpLeft
               size={32}
               className="cursor-pointer border rounded-full p-1 bg-white stroke-purple hover:bg-gray-600 hover:stroke-white "
               onClick={() => setActiveTab("home")}
-            />
+            /> */}
             <div className="text-center text-sm">{tabMap[activeTab].name}</div>
           </>
         )}

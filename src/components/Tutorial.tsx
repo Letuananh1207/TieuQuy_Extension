@@ -31,7 +31,7 @@ const Tutorial: React.FC<TutorialProps> = ({ setShowTutorial }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 6 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="absolute w-[300px] -left-12 h-full bg-black/35 flex justify-center items-center"
+      className="absolute w-[300px] -left-12 h-full bg-black/35 flex justify-center items-center z-100"
     >
       <motion.div
         initial={{ opacity: 0 }}

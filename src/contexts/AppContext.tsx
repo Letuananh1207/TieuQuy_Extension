@@ -9,7 +9,14 @@ import type { HanziData } from "../types/HanziData";
 import { countSearch } from "../ultities/mission";
 
 // 👇 Tab type
-export type TabType = "home" | "search" | "library" | "check" | "premium";
+export type TabType =
+  | "home"
+  | "search"
+  | "library"
+  | "check"
+  | "premium"
+  | "userCheck"
+  | "mail";
 
 // 👇 AppContext type
 export interface AppContextType {
