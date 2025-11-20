@@ -99,8 +99,8 @@ const Content: React.FC = () => {
     );
   if (!hanziData || isError)
     return (
-      <div className="w-full flex flex-col">
-        <div className="w-full flex flex-col justify-center items-center gap-1 text-sm">
+      <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col justify-center items-center gap-1 text-sm">
           <Frown />
           Không có dữ liệu để hiển thị.
           <div className="text-xs">(*Hán tự không thông dụng)</div>

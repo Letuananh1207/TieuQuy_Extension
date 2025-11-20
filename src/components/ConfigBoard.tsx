@@ -59,7 +59,7 @@ const ConfigBoard: React.FC<ConfigBoardProps> = ({
     search: { name: "Tra cứu", component: <Content /> },
     library: { name: "Sổ Tay", component: <Library /> },
     check: { name: "Nhiệm vụ hàng ngày", component: <CheckTab /> },
-    premium: { name: "Premium", component: <Premium /> },
+    premium: { name: "Đăng ký", component: <Premium user={user} /> },
     userCheck: {
       name: "Yêu cầu nâng cấp",
       component: <UserCheck user={user} />,

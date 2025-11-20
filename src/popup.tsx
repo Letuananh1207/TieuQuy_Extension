@@ -50,6 +50,13 @@ export default function Popup() {
   // 🚀 Khi popup mở
   // ===============================
   useEffect(() => {
+    // Wake up server để tránh delay khi login
+    const awakeServer = async () => {
+      await fetch(`${API_URL}/api/ping`)
+        .then(() => console.log("✅ Server sẵn sàng"))
+        .catch(() => console.warn("⚠️ Server đang khởi động..."));
+    };
+
     const checkAndCancelPremium = async (user: UserType) => {
       if (!user?.premium) return;
 
@@ -77,6 +84,9 @@ export default function Popup() {
       }
     };
 
+    // Đánh thức server
+    awakeServer();
+    // --- tải user ---
     loadUser();
 
     chrome.runtime.sendMessage(

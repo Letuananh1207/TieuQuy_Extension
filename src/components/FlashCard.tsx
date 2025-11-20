@@ -90,11 +90,11 @@ const FlashCard: React.FC<FlashCardProps> = ({ characters, callback }) => {
             Lật thẻ
           </div>
         </div>
-        <div className="absolute bottom-2 -left-12 font-bold text-sm">
+        <div className="absolute bottom-14 -left-10 font-bold text-sm">
           {cardIndex + 1} / {characters.length}
         </div>
       </div>
-      <div className="absolute left-[-3.75rem] top-3/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-14">
+      <div className="absolute -left-12 top-3/5 -translate-y-1/2 flex flex-col items-center gap-2 text-[10px] font-bold w-11">
         <a
           className="bg-white w-full text-center py-1 hover:bg-gray-400 cursor-pointer"
           onClick={callback}

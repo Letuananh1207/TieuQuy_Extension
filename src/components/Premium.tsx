@@ -1,7 +1,12 @@
 // Premium.tsx
 import { useState } from "react";
 import { LucideCrown, Check, QrCode, MessageSquareMore } from "lucide-react";
-const Premium: React.FC = () => {
+import type { UserType } from "../types/userType";
+
+interface PremiumProps {
+  user?: UserType;
+}
+const Premium: React.FC<PremiumProps> = ({ user }) => {
   const packageDatas = [
     {
       key: "free",
@@ -30,7 +35,7 @@ const Premium: React.FC = () => {
     "6thang"
   );
   return (
-    <div className="relative w-full h-full bg-[url('/manga_paper_center.png')] bg-center bg-cover">
+    <div className="relative w-full h-full px-1 py-4 bg-[url('/manga_paper_center.png')] bg-center bg-cover">
       <div className="w-full h-full flex flex-col items-stretch overflow-y-auto hide-scrollbar gap-2  px-4">
         {/* Tiêu đề */}
         <div className="flex flex-col items-center gap-0.5">
@@ -124,7 +129,7 @@ const Premium: React.FC = () => {
               年
             </button>
           </div>
-          <div className="relative flex bg-white w-full border p-1 text-sm">
+          <div className="relative flex bg-white w-full border p-1 pb-3 text-sm">
             <div className="h-full flex flex-1 flex-col gap-2 min-w-0">
               <div className="text-center font-bold">
                 {selectedOption === "6thang" ? "6 tháng" : "1 năm"}
@@ -132,14 +137,20 @@ const Premium: React.FC = () => {
               <div className="text-[10px] text-gray-400 font-bold px-1 break-all flex flex-col gap-0.5">
                 Nội dung :
                 <div className="text-black border p-1">
-                  1213432_{selectedOption}
+                  {user?.email}_{selectedOption}
+                </div>
+              </div>
+              <div className="text-[10px] text-gray-400 font-bold px-1 break-all flex flex-col gap-0.5">
+                Người nhận :
+                <div className="text-black border p-1 uppercase">
+                  le tuan anh
                 </div>
               </div>
             </div>
             <img
-              src="./qr-code.png"
+              src="./payment_qr.jpg"
               alt="qr-code"
-              className="w-[96px] h-auto flex-shrink-0"
+              className="w-20 h-auto object-contain flex-shrink-0"
             />
           </div>
         </div>

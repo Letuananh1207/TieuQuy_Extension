@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { SquareCheck, Search, Star } from "lucide-react";
+import { Search } from "lucide-react";
 import { AppContext } from "../contexts/AppContext";
 import Premium from "./Premium";
 import ContentFlash from "./ContentFlash";
@@ -94,7 +94,7 @@ const ChatBot: React.FC = () => {
               color="white"
               className="border rounded-full p-1 bg-gray-600 "
             />
-            <Star
+            {/* <Star
               size={32}
               className="border rounded-full p-1 bg-white hover:stroke-gray-600 hover:bg-gray-600 hover:fill-white cursor-pointer "
               color="purple"
@@ -107,7 +107,7 @@ const ChatBot: React.FC = () => {
               color="white"
               fill="green"
               onClick={() => setActiveTab("check")}
-            />
+            /> */}
             {/* <Gem
               size={32}
               className="cursor-pointer border rounded-full p-1 bg-white  hover:stroke-gray-600 hover:bg-gray-600 hover:fill-white "

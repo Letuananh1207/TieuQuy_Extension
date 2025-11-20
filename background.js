@@ -19,7 +19,7 @@ const isMessageRead = async (id) => {
   });
 };
 
-const CACHE_DURATION = 3 * 5 * 1000; // 15 phút
+const CACHE_DURATION = 24 * 60 * 1000; // 1 ngày
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === "GET_USER_STATUS") {

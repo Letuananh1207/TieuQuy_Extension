@@ -11,9 +11,16 @@ const Tutorial: React.FC<TutorialProps> = ({ setShowTutorial }) => {
 
   const slides = [
     { image: "Step1.png", desc: "Bật extension ở thanh điều hướng" },
-    { image: "Step2.png", desc: "Khởi động từ điển" },
+    {
+      image: "Step2.png",
+      desc: "Nhập Hán tự hoặc Từ vựng chứa hán tự muốn học",
+    },
+    {
+      image: "Step3.png",
+      desc: "Bật tra cứu nhanh",
+    },
     { image: "Step4.png", desc: "Bôi đen từ hoặc hán tự muốn học" },
-    { image: "Step5.png", desc: "Màn hình tra cứu hiện ở góc phải màn hình" },
+    { image: "Step5.png", desc: "Màn hình tra cứu xuất hiện ngay phía dưới" },
   ];
 
   const handleSlide = () => {
