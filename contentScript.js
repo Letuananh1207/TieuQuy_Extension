@@ -20,6 +20,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case "GET_CHATBUDDY_STATUS":
       sendResponse({ active: !!window.__JP_CHATBUDDY_ACTIVE__ });
       break;
+
+    // ==========================
+    // 🖼️ Nhận tín hiệu mở iframe hiển thị ảnh
+    // ==========================
+    case "OPEN_IMAGE_PREVIEW":
+      console.log("Đã nhận được tín hiệu");
+      openImagePreview(message.imageUrl, message.position || "right");
+      sendResponse({ ok: true });
+      break;
   }
   return true;
 });
@@ -35,6 +44,10 @@ function initChatBuddyState() {
     iframe: null,
     container: null,
     currentRange: null,
+
+    // thêm vùng lưu iframe ảnh
+    imageIframe: null,
+    imageIframeContainer: null,
   };
 
   document.addEventListener("mouseup", handleTextSelect);
@@ -88,6 +101,9 @@ function stopChatBuddy() {
 
   state.container?.parentNode?.removeChild(state.container);
   state.searchIcon?.parentNode?.removeChild(state.searchIcon);
+  state.imageIframeContainer?.parentNode?.removeChild(
+    state.imageIframeContainer
+  );
 
   document.removeEventListener("mouseup", handleTextSelect);
   document.removeEventListener("click", handleOutsideClick);
@@ -155,7 +171,6 @@ function handleTextSelect() {
         }
       };
 
-      // Lần đầu tạo iframe thì chờ load xong
       if (!iframe.hasAttribute("data-loaded")) {
         iframe.onload = () => {
           iframe.setAttribute("data-loaded", "true");
@@ -197,10 +212,71 @@ function handleOutsideClick(e) {
 
   if (
     state.container.contains(e.target) ||
-    state.searchIcon?.contains(e.target)
+    state.searchIcon?.contains(e.target) ||
+    state.imageIframeContainer?.contains(e.target)
   ) {
-    return; // click vào iframe hoặc icon thì bỏ qua
+    return;
   }
 
   state.container.style.display = "none";
+  state.imageIframeContainer &&
+    (state.imageIframeContainer.style.display = "none");
+}
+
+// ==========================
+// 🖼️ IFRAME HIỂN THỊ ẢNH (LEFT / RIGHT)
+// ==========================
+function openImagePreview(imageUrl, position = "right") {
+  const state = window.__JP_CHATBUDDY__;
+  if (!state || !state.container) return;
+
+  // Tạo container nếu chưa có
+  if (!state.imageIframeContainer) {
+    const imgContainer = document.createElement("div");
+    imgContainer.id = "jp-image-preview-container";
+
+    Object.assign(imgContainer.style, {
+      position: "absolute",
+      width: "280px",
+      height: "280px",
+      zIndex: "99998",
+      display: "none",
+      background: "white",
+      borderRadius: "8px",
+      boxShadow: "0 2px 12px rgba(0,0,0,0.25)",
+      overflow: "hidden",
+    });
+
+    document.body.appendChild(imgContainer);
+    state.imageIframeContainer = imgContainer;
+
+    const imgIframe = document.createElement("iframe");
+    imgIframe.style.cssText = `
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    `;
+    imgContainer.appendChild(imgIframe);
+    state.imageIframe = imgIframe;
+  }
+
+  // Gán URL ảnh vào iframe preview
+  state.imageIframe.src =
+    chrome.runtime.getURL("dist/secondframe.html") +
+    "?img=" +
+    encodeURIComponent(imageUrl);
+
+  // Lấy vị trí iframe chính
+  const rect = state.container.getBoundingClientRect();
+
+  state.imageIframeContainer.style.top = `${rect.top}px`;
+
+  if (position === "left") {
+    state.imageIframeContainer.style.left = `${rect.left - 270}px`;
+  } else {
+    state.imageIframeContainer.style.left = `${rect.right + 10}px`;
+  }
+
+  state.imageIframeContainer.style.display = "block";
 }

@@ -299,8 +299,9 @@ const Content: React.FC = () => {
             </div>
             <div className="w-full text-xs border p-2 gap-x-2">
               <div className="flex gap-1 w-full">
-                <span className="uppercase font-bold">{hanziData.hanviet}</span>{" "}
-                -<span> {hanziData.meaning.join(", ")}</span>
+                <span className="uppercase font-bold">{hanziData.hanviet}</span>
+                <span>[{hanziData.pinyin}]</span>-
+                <span> {hanziData.meaning.join(", ")}</span>
               </div>
             </div>
           </div>

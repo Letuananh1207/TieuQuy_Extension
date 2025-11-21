@@ -25,7 +25,7 @@ export default function Popup() {
   //     plan: "3_days",
   //     expiresAt: "",
   //     remainingDays: 3,
-  //     active: false,
+  //     active: true,
   //   },
   //   role: "member",
   //   needUpdate: true,

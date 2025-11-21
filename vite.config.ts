@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"), // app chính
         popup: resolve(__dirname, "popup.html"), // popup React
+        secondframe: resolve(__dirname, "secondframe.html"), // secondframe React
       },
       output: {
         manualChunks: {
