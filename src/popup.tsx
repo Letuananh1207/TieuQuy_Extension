@@ -129,7 +129,6 @@ export default function Popup() {
     console.log("=== 🔑 [LOGIN FLOW BẮT ĐẦU] ===");
 
     const extensionId = chrome.runtime.id;
-    const authUrl = `${API_URL}/api/auth/google?extensionId=${extensionId}`;
 
     // 2️⃣ Tạo URL đăng nhập
     const authUrl = `${API_URL}/api/auth/google?prompt=select_account&extensionId=${extensionId}`;
