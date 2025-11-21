@@ -128,7 +128,13 @@ export default function Popup() {
     setLoading(true);
     console.log("=== 🔑 [LOGIN FLOW BẮT ĐẦU] ===");
 
+<<<<<<< HEAD
     const extensionId = chrome.runtime.id;
+=======
+    // 1️⃣ Lấy extension ID động
+    const extensionId = chrome.runtime.id;
+    console.log("👉 Extension ID hiện tại:", extensionId);
+>>>>>>> 85a20aca358d18b0cf364f7c15bbcd9a4372af76
 
     // 2️⃣ Tạo URL đăng nhập
     const authUrl = `${API_URL}/api/auth/google?prompt=select_account&extensionId=${extensionId}`;
@@ -145,17 +151,63 @@ export default function Popup() {
 
         // 4️⃣ Kiểm tra lỗi Chrome runtime
         if (chrome.runtime.lastError) {
+<<<<<<< HEAD
           // console.error("Lỗi khi đăng nhập:", chrome.runtime.lastError); // OK, nhẹ
+=======
+          console.error(
+            "❌ Lỗi khi đăng nhập:",
+            chrome.runtime.lastError.message || chrome.runtime.lastError
+          );
+          console.debug(
+            "📋 Chi tiết lỗi:",
+            JSON.stringify(chrome.runtime.lastError, null, 2)
+          );
+>>>>>>> 85a20aca358d18b0cf364f7c15bbcd9a4372af76
           setLoading(false);
           return;
         }
 
+<<<<<<< HEAD
         if (!redirectUrl) {
           // console.warn("⚠ Không có redirectUrl từ Google"); // OK
+=======
+        // 5️⃣ Kiểm tra redirect URL trả về
+        console.log("🔁 Redirect URL nhận được:", redirectUrl);
+
+        if (redirectUrl) {
+          try {
+            const parsedUrl = new URL(redirectUrl);
+            console.log("✅ Phân tích redirect URL:", parsedUrl);
+
+            const token = parsedUrl.searchParams.get("token");
+            console.log("🔐 Token lấy được từ redirect:", token);
+
+            if (token) {
+              chrome.storage.local.set({ token }, () => {
+                console.log("💾 Token đã được lưu vào storage");
+                loadUser();
+                setShowSuccess(true);
+                setTimeout(() => setShowSuccess(false), 100);
+              });
+            } else {
+              console.warn(
+                "⚠️ Không lấy được token từ redirectUrl:",
+                redirectUrl
+              );
+              setLoading(false);
+            }
+          } catch (err) {
+            console.error("💥 Lỗi khi parse redirectUrl:", err);
+            setLoading(false);
+          }
+        } else {
+          console.warn("⚠️ Không có redirectUrl sau khi login");
+>>>>>>> 85a20aca358d18b0cf364f7c15bbcd9a4372af76
           setLoading(false);
           return;
         }
 
+<<<<<<< HEAD
         // console.log("🔁 Redirect URL:", redirectUrl); // ⚠️ có token trong URL → comment
 
         const token = new URL(redirectUrl).searchParams.get("token");
@@ -172,6 +224,9 @@ export default function Popup() {
           setShowSuccess(true);
           setTimeout(() => setShowSuccess(false), 1000);
         });
+=======
+        console.log("=== 🔚 [LOGIN FLOW KẾT THÚC] ===");
+>>>>>>> 85a20aca358d18b0cf364f7c15bbcd9a4372af76
       }
     );
   };
